@@ -1,0 +1,47 @@
+title:"new project"
+author:Viridana Avila
+========================================================
+
+the sine of $\pi/2$ is `r round(sin(pi/2),)`
+
+
+Lets write some code to generate random normals for the phenotypic scores 
+
+```{r Normal}
+pheno=rnorm(20)
+genes=matrix(rnorm(20*1000),ncol=20)
+genematrixtranspose=t(genes)
+cors= cor(genematrixtranspose,pheno)
+hist(cors,main="Correlations gene expression & phenotypic scores")
+```
+
+```{r Normalfunction}
+simulation=function(npheno=20,ngenes=1000, nsel=10){
+if(nsel>=npheno-1)stop ("warning message")
+pheno=rnorm(npheno)
+genes=matrix(rnorm(npheno*ngenes),ncol=npheno)
+genematrixtranspose=t(genes)
+cors= cor(genematrixtranspose,pheno)
+selgenes=order(cors,decreasing=FALSE)[1:nsel]
+sigGenes=genes[selgenes,]
+R2=var(fitted(lm(pheno~t(sigGenes))))/var(pheno)
+c(maxAbsR=max(abs(cors)),minR=min(cors),maxR=max(cors),Rsq=R2)
+}
+simN20G1000S10=matrix(nrow=1000,ncol=4)
+for (i in 1:1000) simN20G1000S10[i,]=simulation(npheno=20,ngenes=1000,nsel=10)
+hist 
+```
+
+
+hist(cors,main="Correlations gene expression & phenotypic scores")
+}
+```
+
+
+
+You can also embed plots, for example:
+
+```{r fig.width=7, fig.height=6}
+plot(cars)
+```
+
